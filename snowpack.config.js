@@ -5,6 +5,6 @@ module.exports = {
     src: '/_dist_',
   },
   buildOptions: {
-    baseUrl: 'https://dr1602.github.io/workshop/',
+    baseUrl: '/workshop',
   },
 }
