@@ -1,12 +1,12 @@
 {
+  "homepage": "https://dr1602.github.io/workshop/",
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build",
     "format": "prettier --write \"src/**/*.js\"",
     "lint": "prettier --check \"src/**/*.js\"",
     "pre-commit": "pretty-quick --staged",
-    "install:husky": "husky install",
-    "homepage": "https://dr1602.github.io/workshop/"
+    "install:husky": "husky install"
   },
   "devDependencies": {
     "husky": "7",
