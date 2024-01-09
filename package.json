@@ -1,5 +1,5 @@
 {
-  "homepage": "https://dr1602.github.io/workshop/",
+  "homepage": "https://dr1602.github.io/workshop/public",
   "scripts": {
     "start": "snowpack dev",
     "build": "snowpack build",
