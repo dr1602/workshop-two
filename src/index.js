@@ -10,6 +10,14 @@ const altBaseUrl = 'https://api.potterdb.com'
 
 const appNode = document.querySelector('#app');
 
+// Delegacion de eventos, le dejemos al padre que maneje todos los eventos que sucedan en una zona, es bueno especialmente cuando el numero de listeners sea muy grande, esta tecnica la usa, react, angular y svelt, lo usan por debajo, y despu[es especificas en cual se usa]
+
+appNode.addEventListener('click', (event) => {
+    if (event.target.nodeName === "H2") {
+        window.alert('Hola')
+    }
+})
+
 // Agregar API de INTL, de internacionalización para dar formato a fechas y monedas
 
 const formatPrice = (price) => {
@@ -66,7 +74,10 @@ window
             title.textContent = item.attributes.name;
             // title.style = 'font-size: 2rem';
             // title.style.fontSize = '2rem';
-            title.className = 'text-center break-words text-2xl text-yellow-300 py-3'
+            title.className = 'text-center break-words text-2xl text-yellow-300 py-3 cursor-pointer'
+            // title.addEventListener('click', () => {
+            //     window.alert('Hola')
+            // })
 
             const incantation = document.createElement('h3');
             incantation.textContent = item.attributes.incantation;
