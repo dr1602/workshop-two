@@ -81,7 +81,7 @@ const deleteImages = () => {
     // container.id = 'images';
     // container.className = 'my-3 grid grid-cols-1 bg-slate-300 w-[320px]';
 
-    // mainContainer.append(container);
+    // mainContainer.append(container)
     // console.log(mainContainer)
 
 }

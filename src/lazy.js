@@ -14,7 +14,7 @@ const loadImage = (entry) => {
 
     // debugger;
 
-    // console.log(container.nodeName);
+    // console.log(container.nodeName)
 
     // deja de escuchar a la imagen, una vez que ya te has accionado.
 
