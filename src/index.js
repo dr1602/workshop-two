@@ -1,3 +1,4 @@
+// import jsx from '/../node_modules/hyperscript/index.js'
 import { registerImage } from './lazy.js'
 
 // 1. Mover imagenes hacia JS
@@ -17,6 +18,10 @@ const createImageNode = () => {
     container.className = 'm-3';
     container.id = 'imageContainer';
 
+    // const container = h("div.m-3");
+    // container.id = 'imageContainer';
+    // debugger;
+
     const loadingContainer = document.createElement('div');
     loadingContainer.className = 'loading-container mx-auto rounded-lg';
 
@@ -24,6 +29,18 @@ const createImageNode = () => {
     imagen.className = 'mx-auto rounded-lg bg-slate-300 w-[320px] h-[320px] hidden object-contain';
     imagen.width = '320'
     imagen.dataset.src = `https://randomfox.ca/images/${random()}.jpg` //ToDo
+
+    // const imagen = jsx('img.mx-auto.rounded-lg.bg-slate-300.w-[320px].h-[320px].hidden.object-contain', {
+    //     with: '320',
+    //     'data-src': `https://randomfox.ca/images/${random()}.jpg`,
+    // })
+
+    // const container = jsx("div.m-3", imagen);
+
+    // jsx -> html(React)
+
+    // Decorador de React, sustituyendo la API del DOM que vimos.
+    // const container = <div className='m=3'><img/></div
 
     const loadHandler = () => {
         loadingContainer.style.display = 'none';
