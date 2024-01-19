@@ -1,104 +1,95 @@
-/**
- * This file is just a silly example to show everything working in the browser.
- * When you're ready to start on your site, clear the file. Happy hacking!
- **/
+import { registerImage } from './lazy.js'
 
-console.log('Happy hacking :)')
+// 1. Mover imagenes hacia JS
+// 2. Que las imagenes las use JS
+// 3. JS y Eventos para agregar el botón e imágenes de forma interativa.
 
-const baseUrl = 'https://platzi-avo.vercel.app';
-const altBaseUrl = 'https://api.potterdb.com'
+let nuevasImagenes = 0;
+let imagenesCargadas = 0;
 
-const appNode = document.querySelector('#app');
+const maximum = 123;
+const minimum = 1;
+const random = () => Math.floor(Math.random() * (maximum - minimum)) + minimum
 
-// Delegacion de eventos, le dejemos al padre que maneje todos los eventos que sucedan en una zona, es bueno especialmente cuando el numero de listeners sea muy grande, esta tecnica la usa, react, angular y svelt, lo usan por debajo, y despu[es especificas en cual se usa]
+const createImageNode = () => {
 
-appNode.addEventListener('click', (event) => {
-    if (event.target.nodeName === "H2") {
-        window.alert('Hola')
+    const container = document.createElement('div');
+    container.className = 'm-3';
+    container.id = 'imageContainer';
+
+    const loadingContainer = document.createElement('div');
+    loadingContainer.className = 'loading-container mx-auto rounded-lg';
+
+    const imagen = document.createElement('img');
+    imagen.className = 'mx-auto rounded-lg bg-slate-300 w-[320px] h-[320px] hidden object-contain';
+    imagen.width = '320'
+    imagen.dataset.src = `https://randomfox.ca/images/${random()}.jpg` //ToDo
+
+    const loadHandler = () => {
+        loadingContainer.style.display = 'none';
+        imagen.classList.remove('hidden');
+        imagen.classList.add('block');
+        registerImage(container);
+        ++imagenesCargadas
+        console.log(`Imágenes cargadas: ${imagenesCargadas}`);
+        console.log(`Total de imágenes: ${nuevasImagenes}`)
+
+        imagen.removeEventListener('load', loadHandler);
     }
-})
 
-// Agregar API de INTL, de internacionalización para dar formato a fechas y monedas
+    imagen.addEventListener('load', loadHandler);
 
-const formatPrice = (price) => {
+    // loadingContainer.style.height = `${imagen.clientHeight}px`;
+    container.appendChild(loadingContainer)
+    container.appendChild(imagen);
 
-    const newPrice = new window.Intl.NumberFormat('en-En', {
-        style: 'currency',
-        currency: 'GBP'
-    }).format(price);
+    ++nuevasImagenes
+    // console.log(`Imágenes cargadas: ${imagenesCargadas}`);
+    console.log(`Total de imágenes: ${nuevasImagenes}`)
 
-    return newPrice;
-};
+    return container;
+}
 
-// web api
-//  Conectarnos al server
+const nuevaImagen = createImageNode();
+const mountNode = document.getElementById('images');
+// const mainContainer = document.getElementById('mainContainer');
 
-// Mejorar con async y await
+const addButton = document.getElementById('addButton');
+const deleteButton = document.getElementById('deleteButton');
 
-// Codigo con promesas
-window
-    .fetch(`${altBaseUrl}/v1/spells`)
-    // .fetch(`${baseUrl}/api/avo`)
-    // Procesar la respuesta, y convertirla en JSON
-    .then((respuesta) => respuesta.json())
-    // JSON -> Data -> Renderizar informacion
-    .then((responseJson) => {
-        const allItems = [];
-        const imageContainer = []
-        
-        responseJson.data.forEach((item) => {
-            console.log(item.attributes.name);
+// Creates initial image
+const initialImage = () => {
+    mountNode.appendChild(nuevaImagen);
+    registerImage(nuevaImagen);
+}
 
-            const image = document.createElement('img');
-            // document.body.appendChild(image);
-            // image.src = item.image; // URL de la imagen, pero me devuelve rutas relativas.
-            // image.src = `${baseUrl}${item.image}`;
-            if (item.attributes.image) {
-                // Si la propiedad 'image' existe y no es null
-                image.src = item.attributes.image;
-            } else {
-                // Si la propiedad 'image' no existe o es null, usar una imagen alternativa
-                image.src = 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c717f547-b225-4e30-81a7-25f2773c7777/d19in79-f5e20809-d9d2-4b75-9879-d773cceabeec.jpg/v1/fill/w_1020,h_783,q_70,strp/harry_potter_desk_wallpaper_by_emelody_d19in79-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9Nzg2IiwicGF0aCI6IlwvZlwvYzcxN2Y1NDctYjIyNS00ZTMwLTgxYTctMjVmMjc3M2M3Nzc3XC9kMTlpbjc5LWY1ZTIwODA5LWQ5ZDItNGI3NS05ODc5LWQ3NzNjY2VhYmVlYy5qcGciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.EY8t3g5saoQFbTNTK4SU1DCD1fEaQZZf6zZq5KtA6zo';
-            }
-            image.className = 'object-fit h-32 rounded-lg'
-            image.alt = 'Autor: eMelody | Crédito: eMelody on DeviantArt'
+initialImage()
 
-            // crear imagen
-            const imageDiv = document.createElement('div')
-            imageDiv.append(image)
-            imageDiv.className = 'flex justify-center bg-gray-900 rounded-lg pt-6 pb-3 '
+// Add new image with each click
+const addImage = () => {
+    const newImage = createImageNode();
+    mountNode.append(newImage);
+    registerImage(newImage);
 
-            // crear titulo
-            const title = document.createElement('h2');
-            // document.body.appendChild(title);
-            title.textContent = item.attributes.name;
-            // title.style = 'font-size: 2rem';
-            // title.style.fontSize = '2rem';
-            title.className = 'text-center break-words text-2xl text-yellow-300 py-3 cursor-pointer'
-            // title.addEventListener('click', () => {
-            //     window.alert('Hola')
-            // })
+    mountNode.classList.add('md:grid-cols-3')
+}
 
-            const incantation = document.createElement('h3');
-            incantation.textContent = item.attributes.incantation;
-            incantation.className = 'text-center break-words text-sm text-white py-1 px-3'
+const deleteImages = () => {
+    mountNode.remove()
+    location.reload();
+    // const container = document.createElement('div');
+    // container.id = 'images';
+    // container.className = 'my-3 grid grid-cols-1 bg-slate-300 w-[320px]';
 
-            //crear precio
-            // const price = document.createElement('p');
-            // document.body.appendChild(price);
-            // price.textContent = formatPrice(item.price);
+    // mainContainer.append(container);
+    // console.log(mainContainer)
 
-            const effect = document.createElement('p')
-            effect.textContent = item.attributes.effect;
-            effect.className = 'text-center break-words text-xs text-white pt-1 pb-3 px-3'
+}
 
-            const container = document.createElement('div');
-            container.append(imageDiv, title, incantation, effect);
-            container.className = 'bg-black border-white border-2 rounded-xl justify-center my-12 mx-6'
+addButton.addEventListener('click', addImage);
+deleteButton.addEventListener('click', deleteImages); 
 
-            allItems.push(container)
-        });
 
-        appNode.append(...allItems);
-    });
+
+
 
